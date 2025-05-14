@@ -11,18 +11,10 @@ st.set_page_config(
 )
 
 # --- LOGO E TÍTULO ---
-st.image("logo.png", width=150)
+st.image("logo.png", width=200)
 st.markdown("## Indicadores Consolidados")
 
-# --- LOGO NO SIDEBAR ---
-st.sidebar.markdown(
-    """
-    <div style="text-align: center;">
-        <img src="logo.png" width="150">
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+
 st.sidebar.markdown("### Relatório de Indicadores")
 st.sidebar.markdown("Atualizado semanalmente com base no histórico.")
 
