@@ -10,6 +10,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# --- LOGO E TÍTULO ---
 st.image("logo.png", width=150)
 st.markdown("## Indicadores Consolidados")
 
