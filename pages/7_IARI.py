@@ -72,7 +72,6 @@ if os.path.exists(ARQUIVO):
         ax.tick_params(axis='x', colors='black', rotation=45, labelsize=8)
         ax.tick_params(axis='y', colors='black', labelsize=8)
 
-        ax.set_ylim(bottom=80, top=max(valores + [meta]) + 2)  # <-- AQUI É O PONTO-CHAVE
         ax.set_xticks(range(0, len(semanas), 3))
         ax.set_xticklabels([semanas[i] for i in range(0, len(semanas), 3)])
 
