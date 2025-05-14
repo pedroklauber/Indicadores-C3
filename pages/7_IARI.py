@@ -11,22 +11,6 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- CSS PARA MODO ESCURO ---
-st.markdown("""
-<style>
-body {
-    background-color: #0e1117;
-    color: #cfcfcf;
-}
-[data-testid="stAppViewContainer"] {
-    background-color: #0e1117;
-}
-[data-testid="stHeader"] {
-    background-color: #0e1117;
-}
-</style>
-""", unsafe_allow_html=True)
-
 # --- TÍTULO DO DASHBOARD ---
 st.markdown("## Dashboard de IARI - RECAP")
 
@@ -63,7 +47,7 @@ if os.path.exists(ARQUIVO):
     with col1:
         st.markdown("#### Histórico do IARI")
 
-        fig, ax = plt.subplots(figsize=(8, 4), facecolor='#0e1117')
+        fig, ax = plt.subplots(figsize=(8, 4), facecolor='white')
 
         semanas = df["SEMANA"].tolist()
         valores = df["% INDICADOR ATUAL"].astype(float).mul(100).tolist()
@@ -73,27 +57,27 @@ if os.path.exists(ARQUIVO):
         abaixo_meta = [v if v < meta else np.nan for v in valores]
 
         ax.fill_between(semanas, acima_meta, color="#1f77b4", alpha=0.5, label="Acima da Meta")
-        ax.fill_between(semanas, abaixo_meta, color="red", alpha=0.4, label="Abaixo da Meta")
-        ax.plot(semanas, valores, color="white", marker='o', linewidth=1)
+        ax.fill_between(semanas, abaixo_meta, color="red", alpha=0.3, label="Abaixo da Meta")
+        ax.plot(semanas, valores, color="#1f77b4", marker='o', linewidth=1)
 
-        # Projeção de ameaça
         for i, proj in enumerate(ameacas):
             if not np.isnan(proj):
                 ax.plot(semanas[i], proj, marker='o', color="orange", markersize=6, label="% Ameaça Mês" if i == 0 else "")
 
-        ax.axhline(y=meta, color='white', linestyle='--', linewidth=1, label=f"Meta = {meta:.2f}%")
+        ax.axhline(y=meta, color='gray', linestyle='--', linewidth=1, label=f"Meta = {meta:.2f}%")
 
-        ax.set_facecolor('#0e1117')
-        ax.set_ylabel("% IARI", color='white', fontsize=10)
-        ax.set_xlabel("Semana", color='white', fontsize=10)
-        ax.tick_params(axis='x', colors='white', rotation=45, labelsize=8)
-        ax.tick_params(axis='y', colors='white', labelsize=8)
+        ax.set_facecolor('white')
+        ax.set_ylabel("% IARI", color='black', fontsize=10)
+        ax.set_xlabel("Semana", color='black', fontsize=10)
+        ax.tick_params(axis='x', colors='black', rotation=45, labelsize=8)
+        ax.tick_params(axis='y', colors='black', labelsize=8)
 
+        ax.set_ylim(bottom=80, top=max(valores + [meta]) + 2)  # <-- AQUI É O PONTO-CHAVE
         ax.set_xticks(range(0, len(semanas), 3))
         ax.set_xticklabels([semanas[i] for i in range(0, len(semanas), 3)])
 
-        ax.legend(facecolor='#0e1117', edgecolor='white', labelcolor='white', fontsize=8)
-        ax.grid(True, linestyle=':', linewidth=0.5, color='gray')
+        ax.legend(facecolor='white', edgecolor='black', labelcolor='black', fontsize=8)
+        ax.grid(True, linestyle=':', linewidth=0.5, color='lightgray')
 
         fig.tight_layout()
         st.pyplot(fig)
@@ -112,18 +96,18 @@ if os.path.exists(ARQUIVO):
             texto = "Abaixo da meta"
 
         st.markdown(f"""
-        <div style="background-color:#1e1e1e;padding:6px 10px;border-radius:10px;text-align:center">
+        <div style="background-color:#f5f5f5;padding:6px 10px;border-radius:10px;text-align:center">
             <h1 style="color:{cor};font-size:36px;margin:4px 0">{valor_atual:.2f}%</h1>
-            <p style="color:gray;font-size:13px;margin:2px 0">Percentual IARI</p>
+            <p style="color:#444;font-size:13px;margin:2px 0">Percentual IARI</p>
             <p style="color:{cor};font-size:16px;margin:4px 0">{emoji} {texto}</p>
-            <p style="color:white;font-size:11px;margin:2px 0">Meta: {meta:.2f}%</p>
+            <p style="color:#333;font-size:11px;margin:2px 0">Meta: {meta:.2f}%</p>
         </div>
         """, unsafe_allow_html=True)
 
         if resumo:
             st.markdown(f"""
-            <div style="background-color:#2a2a2a;padding:8px 12px;margin-top:8px;border-radius:8px;">
-                <p style="color:white;font-size:13px;margin:0;text-align:justify">📌 <b>Resumo:</b> {resumo}</p>
+            <div style="background-color:#f0f0f0;padding:8px 12px;margin-top:8px;border-radius:8px;">
+                <p style="color:#222;font-size:13px;margin:0;text-align:justify">📌 <b>Resumo:</b> {resumo}</p>
             </div>
             """, unsafe_allow_html=True)
 

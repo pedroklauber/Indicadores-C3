@@ -13,10 +13,6 @@ st.set_page_config(
 st.image("logo.png", width=150)
 st.markdown("## Indicadores Consolidados")
 
-
-
-
-
 # --- LOGO NO SIDEBAR ---
 st.sidebar.markdown(
     """
@@ -28,22 +24,6 @@ st.sidebar.markdown(
 )
 st.sidebar.markdown("### Relatório de Indicadores")
 st.sidebar.markdown("Atualizado semanalmente com base no histórico.")
-
-# --- CSS ESCURO ---
-st.markdown("""
-<style>
-body {
-    background-color: #0e1117;
-    color: #cfcfcf;
-}
-[data-testid="stAppViewContainer"] {
-    background-color: #0e1117;
-}
-[data-testid="stHeader"] {
-    background-color: #0e1117;
-}
-</style>
-""", unsafe_allow_html=True)
 
 # --- CAMINHO DO ARQUIVO ---
 ARQUIVO = "historico_recap.xlsx"
@@ -132,19 +112,18 @@ for titulo, indicadores in grupos.items():
             valor_formatado = f"{valor * 100:.2f}%" if unidade == "%" else f"{valor:.2f}{unidade}"
             meta_formatada = f"{meta * 100:.2f}%" if unidade == "%" else f"{meta:.2f}{unidade}"
 
-            # Espaço extra para a linha inferior da seção "Indicadores Cliente"
             espaco_extra = ""
             if titulo == "Indicadores Cliente" and i in [3, 4, 5]:
                 espaco_extra = "<div style='margin-top: 24px;'></div>"
 
             st.markdown(f"""{espaco_extra}<p style='font-size:14px; font-weight:bold'>{ind['nome']}</p>""", unsafe_allow_html=True)
             st.markdown(f"""
-            <div style="background-color:#1e1e1e;padding:10px;border-radius:10px;text-align:center">
+            <div style="background-color:#f5f5f5;padding:10px;border-radius:10px;text-align:center">
                 <h1 style="color:{cor};font-size:32px;margin:4px 0">{valor_formatado}</h1>
                 <p style="color:{cor};font-size:15px;margin:0">{emoji} {status}</p>
-                <p style="color:white;font-size:11px;margin:0">Meta: {meta_formatada}</p>
+                <p style="color:#333;font-size:11px;margin:0">Meta: {meta_formatada}</p>
             </div>
             """, unsafe_allow_html=True)
 
     if titulo == "Indicadores Contratuais":
-        st.markdown("<hr style='border: 1px solid #444;'>", unsafe_allow_html=True)
+        st.markdown("<hr style='border: 1px solid #ccc;'>", unsafe_allow_html=True)

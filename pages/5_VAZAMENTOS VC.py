@@ -11,22 +11,6 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- CSS PARA MODO ESCURO ---
-st.markdown("""
-<style>
-body {
-    background-color: #0e1117;
-    color: #cfcfcf;
-}
-[data-testid="stAppViewContainer"] {
-    background-color: #0e1117;
-}
-[data-testid="stHeader"] {
-    background-color: #0e1117;
-}
-</style>
-""", unsafe_allow_html=True)
-
 # --- TÍTULO DO DASHBOARD ---
 st.markdown("## Dashboard de Vazamentos VC - RECAP")
 
@@ -46,7 +30,6 @@ if os.path.exists(ARQUIVO):
     vaz_atual = float(ultimo["VAZAMENTOS VP"])
     meta = float(ultimo["META"])
 
-    # Correção da leitura segura do resumo
     if "DESCRIÇÃO DA META" in ultimo and pd.notnull(ultimo["DESCRIÇÃO DA META"]):
         resumo = str(ultimo["DESCRIÇÃO DA META"]).strip()
     else:
@@ -59,7 +42,7 @@ if os.path.exists(ARQUIVO):
     with col1:
         st.markdown("#### Histórico de Vazamentos VC")
 
-        fig1, ax1 = plt.subplots(figsize=(8, 4), facecolor='#0e1117')
+        fig1, ax1 = plt.subplots(figsize=(8, 4), facecolor='white')
 
         semanas = df["SEMANA"].tolist()
         valores = df["VAZAMENTOS VP"].astype(float).tolist()
@@ -68,22 +51,22 @@ if os.path.exists(ARQUIVO):
         acima_meta = [v if v > meta else np.nan for v in valores]
 
         ax1.fill_between(semanas, abaixo_meta, color="#1f77b4", alpha=0.5, label="Abaixo da Meta")
-        ax1.fill_between(semanas, acima_meta, color="red", alpha=0.4, label="Acima da Meta")
-        ax1.plot(semanas, valores, color="white", marker='o', linewidth=1)
+        ax1.fill_between(semanas, acima_meta, color="red", alpha=0.3, label="Acima da Meta")
+        ax1.plot(semanas, valores, color="#1f77b4", marker='o', linewidth=1)
 
-        ax1.axhline(y=meta, color='red', linestyle='--', label=f"Meta = {meta}")
+        ax1.axhline(y=meta, color='gray', linestyle='--', label=f"Meta = {meta}")
 
-        ax1.set_facecolor('#0e1117')
-        ax1.set_ylabel("Qtd. Vazamentos", color='white', fontsize=10)
-        ax1.set_xlabel("Semana", color='white', fontsize=10)
-        ax1.tick_params(axis='x', colors='white', rotation=45, labelsize=8)
-        ax1.tick_params(axis='y', colors='white', labelsize=8)
+        ax1.set_facecolor('white')
+        ax1.set_ylabel("Qtd. Vazamentos", color='black', fontsize=10)
+        ax1.set_xlabel("Semana", color='black', fontsize=10)
+        ax1.tick_params(axis='x', colors='black', rotation=45, labelsize=8)
+        ax1.tick_params(axis='y', colors='black', labelsize=8)
 
         ax1.set_xticks(range(0, len(semanas), 3))
         ax1.set_xticklabels([semanas[i] for i in range(0, len(semanas), 3)])
 
-        ax1.legend(facecolor='#0e1117', edgecolor='white', labelcolor='white', fontsize=8)
-        ax1.grid(True, linestyle=':', linewidth=0.5, color='gray')
+        ax1.legend(facecolor='white', edgecolor='black', labelcolor='black', fontsize=8)
+        ax1.grid(True, linestyle=':', linewidth=0.5, color='lightgray')
 
         fig1.tight_layout()
         st.pyplot(fig1)
@@ -101,21 +84,19 @@ if os.path.exists(ARQUIVO):
             emoji = "⚠️"
             texto = "Acima da meta"
 
-        # KPI visual
         st.markdown(f"""
-        <div style="background-color:#1e1e1e;padding:6px 10px;border-radius:10px;text-align:center">
+        <div style="background-color:#f5f5f5;padding:6px 10px;border-radius:10px;text-align:center">
             <h1 style="color:{cor};font-size:36px;margin:4px 0">{vaz_atual}</h1>
-            <p style="color:gray;font-size:13px;margin:2px 0">Vazamentos na semana</p>
+            <p style="color:#444;font-size:13px;margin:2px 0">Vazamentos na semana</p>
             <p style="color:{cor};font-size:16px;margin:4px 0">{emoji} {texto}</p>
-            <p style="color:white;font-size:11px;margin:2px 0">Meta: {meta} &nbsp; • &nbsp; Menos é Melhor</p>
+            <p style="color:#333;font-size:11px;margin:2px 0">Meta: {meta} &nbsp; • &nbsp; Menos é Melhor</p>
         </div>
         """, unsafe_allow_html=True)
 
-        # RESUMO abaixo do KPI
         if resumo:
             st.markdown(f"""
-            <div style="background-color:#2a2a2a;padding:8px 12px;margin-top:8px;border-radius:8px;">
-                <p style="color:white;font-size:13px;margin:0;text-align:justify">📌 <b>Resumo:</b> {resumo}</p>
+            <div style="background-color:#f0f0f0;padding:8px 12px;margin-top:8px;border-radius:8px;">
+                <p style="color:#222;font-size:13px;margin:0;text-align:justify">📌 <b>Resumo:</b> {resumo}</p>
             </div>
             """, unsafe_allow_html=True)
 
