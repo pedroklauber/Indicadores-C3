@@ -110,12 +110,12 @@ for titulo, indicadores in grupos.items():
             if titulo == "Indicadores Cliente" and i in [3, 4, 5]:
                 espaco_extra = "<div style='margin-top: 24px;'></div>"
 
-            st.markdown(f"""{espaco_extra}<p style='font-size:14px; font-weight:bold'>{ind['nome']}</p>""", unsafe_allow_html=True)
+            st.markdown(f"""{espaco_extra}<p style='font-size:18px; font-weight:bold'>{ind['nome']}</p>""", unsafe_allow_html=True)
             st.markdown(f"""
             <div style="background-color:#f5f5f5;padding:10px;border-radius:10px;text-align:center">
                 <h1 style="color:{cor};font-size:32px;margin:4px 0">{valor_formatado}</h1>
                 <p style="color:{cor};font-size:15px;margin:0">{emoji} {status}</p>
-                <p style="color:#333;font-size:11px;margin:0">Meta: {meta_formatada}</p>
+                <p style="color:#333;font-size:12px;margin:0">Meta: {meta_formatada}</p>
             </div>
             """, unsafe_allow_html=True)
 
