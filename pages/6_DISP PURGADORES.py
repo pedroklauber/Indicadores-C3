@@ -62,6 +62,7 @@ if os.path.exists(ARQUIVO):
         ax1.tick_params(axis='x', colors='black', rotation=45, labelsize=8)
         ax1.tick_params(axis='y', colors='black', labelsize=8)
 
+        ax1.set_ylim(bottom=70)
         ax1.set_xticks(range(len(meses)))
         ax1.set_xticklabels(meses)
 

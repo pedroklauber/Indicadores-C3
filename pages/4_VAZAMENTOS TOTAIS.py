@@ -35,16 +35,17 @@ if os.path.exists(ARQUIVO):
     col1, col2 = st.columns([2, 1])
 
     # --- GRÁFICO DE ÁREA COLORIDA ---
+   
     with col1:
         st.markdown("#### Histórico de Vazamentos")
 
-        fig1, ax1 = plt.subplots(figsize=(8, 4), facecolor='white')
+        fig1, ax1 = plt.subplots(figsize=(10, 5), facecolor='white')  # gráfico mais largo
 
         semanas = df["SEMANA"].tolist()
         valores = df["VAZAMENTOS TOTAIS"].tolist()
 
         abaixo_meta = [v if v <= meta else meta for v in valores]
-        acima_meta = [v if v > meta else None for v in valores]
+        acima_meta = [v if v > meta else np.nan for v in valores]  # use np.nan para fill_between
 
         ax1.fill_between(semanas, abaixo_meta, color="#1f77b4", alpha=0.5, label="Abaixo da Meta")
         ax1.fill_between(semanas, acima_meta, color="red", alpha=0.3, label="Acima da Meta")
@@ -55,11 +56,14 @@ if os.path.exists(ARQUIVO):
         ax1.set_facecolor('white')
         ax1.set_ylabel("Qtd. Vazamentos", color='black', fontsize=10)
         ax1.set_xlabel("Semana", color='black', fontsize=10)
-        ax1.tick_params(axis='x', colors='black', rotation=45, labelsize=8)
-        ax1.tick_params(axis='y', colors='black', labelsize=8)
 
-        ax1.set_xticks(range(0, len(semanas), 3))
-        ax1.set_xticklabels([semanas[i] for i in range(0, len(semanas), 3)])
+        # Calcular passo para mostrar no máximo 10 labels
+        step = max(1, len(semanas) // 10)
+        ax1.set_xticks(range(0, len(semanas), step))
+        ax1.set_xticklabels([semanas[i] for i in range(0, len(semanas), step)])
+
+        ax1.tick_params(axis='x', colors='black', rotation=60, labelsize=8)  # rotação maior
+        ax1.tick_params(axis='y', colors='black', labelsize=8)
 
         ax1.legend(facecolor='white', edgecolor='black', labelcolor='black', fontsize=8)
         ax1.grid(True, linestyle=':', linewidth=0.5, color='lightgray')

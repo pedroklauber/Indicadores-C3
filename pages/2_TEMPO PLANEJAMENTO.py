@@ -43,10 +43,12 @@ if os.path.exists(ARQUIVO):
     col1, col2 = st.columns([2, 1])
 
     # --- GRÁFICO DE ÁREA COM PROJEÇÃO ---
+    
+
     with col1:
         st.markdown("#### Histórico de Tempo de Planejamento")
 
-        fig, ax = plt.subplots(figsize=(8, 4), facecolor='white')
+        fig, ax = plt.subplots(figsize=(10, 5), facecolor='white')  # largura maior
 
         semanas = df["SEMANA"].tolist()
         valores = df["TEMPO DE PLANEJAMENTO"].astype(float).tolist()
@@ -68,11 +70,14 @@ if os.path.exists(ARQUIVO):
         ax.set_facecolor('white')
         ax.set_ylabel("Tempo (dias)", color='black', fontsize=10)
         ax.set_xlabel("Semana", color='black', fontsize=10)
-        ax.tick_params(axis='x', colors='black', rotation=45, labelsize=8)
-        ax.tick_params(axis='y', colors='black', labelsize=8)
 
-        ax.set_xticks(range(0, len(semanas), 3))
-        ax.set_xticklabels([semanas[i] for i in range(0, len(semanas), 3)])
+        # Ajuste dinâmico do espaçamento dos ticks para não embolar
+        step = max(1, len(semanas) // 10)  # mostra até 10 labels no eixo x
+        ax.set_xticks(range(0, len(semanas), step))
+        ax.set_xticklabels([semanas[i] for i in range(0, len(semanas), step)])
+
+        ax.tick_params(axis='x', colors='black', rotation=60, labelsize=8)  # rotaciona mais
+        ax.tick_params(axis='y', colors='black', labelsize=8)
 
         ax.legend(facecolor='white', edgecolor='black', labelcolor='black', fontsize=8)
         ax.grid(True, linestyle=':', linewidth=0.5, color='lightgray')

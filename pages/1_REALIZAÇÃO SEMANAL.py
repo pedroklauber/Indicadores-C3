@@ -46,7 +46,7 @@ if os.path.exists(ARQUIVO):
     with col1:
         st.markdown("#### Histórico de Realização Semanal")
 
-        fig, ax = plt.subplots(figsize=(8, 4), facecolor='white')
+        fig, ax = plt.subplots(figsize=(10, 5), facecolor='white')  # Aumenta largura do gráfico
 
         semanas = df["SEMANA"].tolist()
         valores = df["REALIZAÇÃO  SEMANAL"].astype(float).mul(100).tolist()
@@ -68,12 +68,15 @@ if os.path.exists(ARQUIVO):
         ax.set_facecolor('white')
         ax.set_ylabel("% Realização", color='black', fontsize=10)
         ax.set_xlabel("Semana", color='black', fontsize=10)
-        ax.tick_params(axis='x', colors='black', rotation=45, labelsize=8)
+
+        # Aplica espaçamento adequado entre rótulos do eixo X
+        step = max(1, len(semanas) // 10)  # mostra até 10 labels no eixo x
+        ax.set_xticks(range(0, len(semanas), step))
+        ax.set_xticklabels([semanas[i] for i in range(0, len(semanas), step)])
+
+        ax.tick_params(axis='x', colors='black', rotation=60, labelsize=8)  # Rotação maior
         ax.tick_params(axis='y', colors='black', labelsize=8)
         ax.set_ylim(bottom=70)
-
-        ax.set_xticks(range(0, len(semanas), 3))
-        ax.set_xticklabels([semanas[i] for i in range(0, len(semanas), 3)])
 
         ax.legend(facecolor='white', edgecolor='black', labelcolor='black', fontsize=8)
         ax.grid(True, linestyle=':', linewidth=0.5, color='lightgray')

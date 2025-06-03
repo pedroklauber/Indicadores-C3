@@ -47,39 +47,53 @@ if os.path.exists(ARQUIVO):
     with col1:
         st.markdown("#### Histórico do IARI")
 
-        fig, ax = plt.subplots(figsize=(8, 4), facecolor='white')
+        fig, ax = plt.subplots(figsize=(10, 6), facecolor='white')
 
         semanas = df["SEMANA"].tolist()
         valores = df["% INDICADOR ATUAL"].astype(float).mul(100).tolist()
         ameacas = df["AMEACA_MES"].tolist()
 
-        acima_meta = [v if v >= meta else meta for v in valores]
-        abaixo_meta = [v if v < meta else np.nan for v in valores]
+        x = np.arange(len(semanas))
+        largura = 0.6
 
-        ax.fill_between(semanas, acima_meta, color="#1f77b4", alpha=0.5, label="Acima da Meta")
-        ax.fill_between(semanas, abaixo_meta, color="red", alpha=0.3, label="Abaixo da Meta")
-        ax.plot(semanas, valores, color="#1f77b4", marker='o', linewidth=1)
+        # Barras principais - IARI (azul)
+        barras_iari = ax.bar(x, valores, width=largura, color="#1f77b4", label="% IARI Atual")
 
-        for i, proj in enumerate(ameacas):
-            if not np.isnan(proj):
-                ax.plot(semanas[i], proj, marker='o', color="orange", markersize=6, label="% Ameaça Mês" if i == 0 else "")
+        # Barras de Ameaça (cinza claro), mais estreitas sobre as azuis
+        for i, val in enumerate(ameacas):
+            if not np.isnan(val):
+                ax.bar(x[i], val, width=largura * 0.4, color="#a9a9a9", label="% Ameaça Mês" if i == 0 else "")
 
-        ax.axhline(y=meta, color='gray', linestyle='--', linewidth=1, label=f"Meta = {meta:.2f}%")
+        # Rótulos nas barras de IARI
+        for rect, val in zip(barras_iari, valores):
+            ax.text(rect.get_x() + rect.get_width()/2, rect.get_height() + 0.5, f"{val:.1f}%", 
+                    ha='center', va='bottom', fontsize=7)
 
+        # Rótulos nas barras de Ameaça
+        for i, val in enumerate(ameacas):
+            if not np.isnan(val):
+                ax.text(x[i], val + 0.5, f"{val:.1f}%", ha='center', va='bottom', fontsize=7, color='black')
+
+        # Linha da meta
+        ax.axhline(y=meta, color='gray', linestyle='--', linewidth=1.2, label=f"Meta ({meta:.2f}%)")
+
+        # Eixos e layout
         ax.set_facecolor('white')
-        ax.set_ylabel("% IARI", color='black', fontsize=10)
-        ax.set_xlabel("Semana", color='black', fontsize=10)
-        ax.tick_params(axis='x', colors='black', rotation=45, labelsize=8)
-        ax.tick_params(axis='y', colors='black', labelsize=8)
+        ax.set_ylabel("% IARI", fontsize=9, color='black')
+        ax.set_xlabel("Semana", fontsize=9, color='black')
+        ax.set_xticks(x)
+        ax.set_xticklabels(semanas, rotation=45, ha='right', fontsize=7)
+        ax.tick_params(axis='y', labelsize=7)
 
-        ax.set_xticks(range(0, len(semanas), 3))
-        ax.set_xticklabels([semanas[i] for i in range(0, len(semanas), 3)])
+        # Legenda sem duplicatas
+        handles, labels = ax.get_legend_handles_labels()
+        by_label = dict(zip(labels, handles))
+        ax.legend(by_label.values(), by_label.keys(), fontsize=8, facecolor='white', edgecolor='black')
 
-        ax.legend(facecolor='white', edgecolor='black', labelcolor='black', fontsize=8)
         ax.grid(True, linestyle=':', linewidth=0.5, color='lightgray')
-
         fig.tight_layout()
         st.pyplot(fig)
+
 
     # --- KPI + RESUMO ---
     with col2:
